@@ -10,7 +10,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun App() {
     MaterialTheme {
-        var board by remember { mutableStateOf(generatePuzzle()) }
+        var board by remember { mutableStateOf(generatePuzzle(solved = true)) }
+        println("Solved: ${board.isSolved()}")
 
         Column(
             Modifier.fillMaxWidth().fillMaxHeight(),
@@ -20,6 +21,7 @@ fun App() {
             Button(onClick = { board = generatePuzzle() }) {
                 Text("Reset puzzles")
             }
+            Text(if (!board.isSolved()) "Good luck" else "Well done!")
             Spacer(Modifier.height(16.dp))
             Puzzle(board = board) {
                 board = it
