@@ -1,8 +1,17 @@
 import kotlin.math.sqrt
 
-fun generatePuzzle(solved: Boolean = false) =
-    (1 until PUZZLE_SIZE * PUZZLE_SIZE).plus(0)
+fun generatePuzzle(solved: Boolean = false): List<Int> { while (true) {
+    val puzzle = (1 until PUZZLE_SIZE * PUZZLE_SIZE)
+        .plus(0)
         .let { if (solved) it else it.shuffled() }
+    if (puzzle.isSolvable()) {
+        println("Found solvable puzzle")
+        return puzzle
+    } else {
+        println("Did not find solvable puzzle, trying again...")
+    }
+}
+}
 
 fun List<Int>.moveSquare(indexToMove: Int): List<Int> {
     return if (isNextToEmptySquare(indexToMove)) {
@@ -15,9 +24,36 @@ fun List<Int>.moveSquare(indexToMove: Int): List<Int> {
 }
 
 fun List<Int>.isNextToEmptySquare(index: Int): Boolean {
-    val size = sqrt(this.size.toFloat()).toInt()
+    val size = this.getSize()
     val emptySquareIndex = this.indexOf(0)
     return listOf(index + size, index - size, index + 1, index - 1).contains(emptySquareIndex)
 }
 
 fun List<Int>.isSolved() = this.dropLast(1).asSequence().zipWithNext { a, b -> a <= b }.all { it }
+
+/** Calculate if the puzzle is solvable by counting inversions */
+fun List<Int>.isSolvable(): Boolean {
+    val order = this.filter { it != 0 }
+
+    val size = this.getSize()
+    var inverseCount = 0
+    for (i in order.indices) {
+        for (j in i + 1 until order.size) {
+            if (order[i] > order[j]) {
+                inverseCount++
+            }
+        }
+    }
+
+    /** Different logic for odd/even-numbered height
+     * https://www.sitepoint.com/randomizing-sliding-puzzle-tiles/
+     */
+    return if (size % 2 == 1) {
+        inverseCount % 2 == 0
+    } else {
+        val emptySquareRow = this.indexOf(0) / PUZZLE_SIZE
+        (inverseCount + size - (emptySquareRow + 1)) % 2 == 0
+    }
+}
+
+fun List<Int>.getSize() = sqrt(this.size.toFloat()).toInt()
