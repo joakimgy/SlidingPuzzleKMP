@@ -10,21 +10,35 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun App() {
     MaterialTheme {
+        var points by remember { mutableStateOf(0) }
         var board by remember { mutableStateOf(generatePuzzle(solved = true)) }
-        println("Solved: ${board.isSolved()}")
 
         Column(
             Modifier.fillMaxWidth().fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            Button(onClick = { board = generatePuzzle() }) {
-                Text("Reset puzzles")
-            }
             Text(if (!board.isSolved()) "Good luck" else "Well done!")
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("Point: $points")
+                Spacer(Modifier.width(20.dp))
+                if (board.isSolved()) {
+                    Button(onClick = {
+                        board = generatePuzzle()
+                        points++
+                    }) {
+                        Text("New puzzle")
+                    }
+                } else {
+                    Button(onClick = { board = generatePuzzle() }) {
+                        Text("Reset puzzle")
+                    }
+                }
+            }
+
             Spacer(Modifier.height(16.dp))
-            Puzzle(board = board) {
-                board = it
+            PuzzleView(board) {
+                board = board.moveSquare(it)
             }
         }
     }

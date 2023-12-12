@@ -1,16 +1,14 @@
 import kotlin.math.sqrt
 
-fun generatePuzzle(solved: Boolean = false): List<Int> { while (true) {
-    val puzzle = (1 until PUZZLE_SIZE * PUZZLE_SIZE)
-        .plus(0)
-        .let { if (solved) it else it.shuffled() }
-    if (puzzle.isSolvable()) {
-        println("Found solvable puzzle")
-        return puzzle
-    } else {
-        println("Did not find solvable puzzle, trying again...")
+fun generatePuzzle(solved: Boolean = false): List<Int> {
+    while (true) {
+        val puzzle = (1 until PUZZLE_SIZE * PUZZLE_SIZE)
+            .plus(0)
+            .let { if (solved) it else it.shuffled() }
+        if (puzzle.isSolvable()) {
+            return puzzle
+        }
     }
-}
 }
 
 fun List<Int>.moveSquare(indexToMove: Int): List<Int> {
@@ -18,7 +16,6 @@ fun List<Int>.moveSquare(indexToMove: Int): List<Int> {
         val emptySquareIndex = this.indexOf(0)
         this.swap(emptySquareIndex, indexToMove)
     } else {
-        println("Could not move square $indexToMove")
         this
     }
 }
