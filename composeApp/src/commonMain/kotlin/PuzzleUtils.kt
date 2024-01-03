@@ -48,9 +48,50 @@ fun List<Int>.isSolvable(): Boolean {
     return if (size % 2 == 1) {
         inverseCount % 2 == 0
     } else {
-        val emptySquareRow = this.indexOf(0) / PUZZLE_SIZE
+        val emptySquareRow = this.indexOf(0) / this.getSize()
         (inverseCount + size - (emptySquareRow + 1)) % 2 == 0
     }
 }
 
 fun List<Int>.getSize() = sqrt(this.size.toFloat()).toInt()
+
+enum class PuzzleKeyboardAction {
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+}
+
+fun List<Int>.squareIndexForKeyboardAction(action: PuzzleKeyboardAction): Int? {
+    val puzzleSize = this.getSize()
+    val emptySquareIndex = this.indexOf(0)
+    val column = emptySquareIndex % puzzleSize
+    val row = emptySquareIndex / puzzleSize
+
+    when (action) {
+        PuzzleKeyboardAction.LEFT -> {
+            if (column > 0) {
+                return emptySquareIndex - 1
+            }
+        }
+
+        PuzzleKeyboardAction.RIGHT -> {
+            if (column < puzzleSize - 1) {
+                return emptySquareIndex + 1
+            }
+        }
+
+        PuzzleKeyboardAction.UP -> {
+            if (row > 0) {
+                return emptySquareIndex - puzzleSize
+            }
+        }
+
+        PuzzleKeyboardAction.DOWN -> {
+            if (row < puzzleSize - 1) {
+                return emptySquareIndex + puzzleSize
+            }
+        }
+    }
+    return null
+}
