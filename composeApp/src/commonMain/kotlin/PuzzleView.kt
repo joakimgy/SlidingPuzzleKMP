@@ -1,10 +1,6 @@
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -12,12 +8,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun PuzzleView(board: List<Int>, onClick: (squareIndex: Int) -> Unit) {
     Box(modifier = Modifier.widthIn(max = 600.dp).border(2.dp, Color.Black)) {
@@ -31,9 +33,28 @@ fun PuzzleView(board: List<Int>, onClick: (squareIndex: Int) -> Unit) {
                         .clickable { onClick(item.index) },
                     contentAlignment = Alignment.Center,
                 ) {
+                    val puzzleSize = board.getSize()
+                    if (!isEmptySquare) {
+                        Box(modifier = Modifier.fillMaxSize().clipToBounds()) {
+                            Image(
+                                painter = painterResource("forest_small.jpg"),
+                                contentDescription = "Square ${item.value} at row ${item.index / puzzleSize}, column ${item.index % puzzleSize}",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.graphicsLayer {
+                                    val column = item.value % puzzleSize
+                                    val row = item.value / puzzleSize
+                                    transformOrigin = TransformOrigin(0f, 0f)
+                                    scaleX = puzzleSize.toFloat()
+                                    scaleY = puzzleSize.toFloat()
+                                    translationX = -(column * this.size.width)
+                                    translationY = -(row * this.size.height)
+                                }.fillMaxSize()
+                            )
+                        }
+                    }
                     Text(
                         text = if (!isEmptySquare) "${item.value}" else "",
-                        style = TextStyle(fontSize = 24.sp),
+                        style = TextStyle(fontSize = 24.sp, background = Color.White),
                     )
                 }
             }
