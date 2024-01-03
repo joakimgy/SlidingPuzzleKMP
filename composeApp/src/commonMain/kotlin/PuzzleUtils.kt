@@ -1,8 +1,9 @@
 import kotlin.math.sqrt
 
 fun generatePuzzle(solved: Boolean = false): List<Int> {
+    val size = getPuzzleConfig().puzzleSize
     while (true) {
-        val puzzle = (1 until PUZZLE_SIZE * PUZZLE_SIZE)
+        val puzzle = (1 until size * size)
             .plus(0)
             .let { if (solved) it else it.shuffled() }
         if (puzzle.isSolvable()) {
