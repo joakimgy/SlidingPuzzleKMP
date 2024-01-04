@@ -47,6 +47,10 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.camera.camera2)
+            implementation(libs.androidx.camera.lifecycle)
+            implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
+            implementation(libs.androidx.camera.view)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

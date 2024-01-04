@@ -1,5 +1,4 @@
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -21,7 +20,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun PuzzleView(board: List<Int>, onClick: (squareIndex: Int) -> Unit) {
+fun PuzzleView(board: List<Int>, image: ByteArray?, onClick: (squareIndex: Int) -> Unit) {
     Box(modifier = Modifier.widthIn(max = 600.dp).border(2.dp, Color.Black)) {
         LazyVerticalGrid(columns = GridCells.Fixed(board.getSize())) {
             items(board.withIndex().toList()) { item ->
@@ -36,20 +35,34 @@ fun PuzzleView(board: List<Int>, onClick: (squareIndex: Int) -> Unit) {
                     val puzzleSize = board.getSize()
                     if (!isEmptySquare) {
                         Box(modifier = Modifier.fillMaxSize().clipToBounds()) {
-                            Image(
-                                painter = painterResource("forest_small.jpg"),
-                                contentDescription = "Square ${item.value} at row ${item.index / puzzleSize}, column ${item.index % puzzleSize}",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.graphicsLayer {
-                                    val column = item.value % puzzleSize
-                                    val row = item.value / puzzleSize
-                                    transformOrigin = TransformOrigin(0f, 0f)
-                                    scaleX = puzzleSize.toFloat()
-                                    scaleY = puzzleSize.toFloat()
-                                    translationX = -(column * this.size.width)
-                                    translationY = -(row * this.size.height)
-                                }.fillMaxSize()
-                            )
+                            val contentDescription =
+                                "Square ${item.value} at row ${item.index / puzzleSize}, column ${item.index % puzzleSize}"
+                            val contentScale = ContentScale.Crop
+                            val modifier = Modifier.graphicsLayer {
+                                val column = (item.value - 1) % puzzleSize
+                                val row = (item.value - 1) / puzzleSize
+                                transformOrigin = TransformOrigin(0f, 0f)
+                                scaleX = puzzleSize.toFloat()
+                                scaleY = puzzleSize.toFloat()
+                                translationX = -(column * this.size.width)
+                                translationY = -(row * this.size.height)
+                            }.fillMaxSize()
+                            if (image != null) {
+                                CapturedImage(
+                                    imageData = image,
+                                    contentDescription = contentDescription,
+                                    contentScale = contentScale,
+                                    modifier = modifier
+                                )
+                            } else {
+                                Image(
+                                    painter = painterResource("forest_small.jpg"),
+                                    contentDescription = contentDescription,
+                                    contentScale = contentScale,
+                                    modifier = modifier
+                                )
+                            }
+
                         }
                     }
                     Text(
