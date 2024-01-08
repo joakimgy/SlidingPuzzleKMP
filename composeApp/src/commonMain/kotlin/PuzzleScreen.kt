@@ -11,71 +11,60 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 
-object PuzzleScreen : Screen {
+data class PuzzleScreen(
+    val image: ByteArray?
+) : Screen {
 
     @Composable
     override fun Content() {
-        Text("Puzzle", style = MaterialTheme.typography.h2)
+        val navigator = LocalNavigator.currentOrThrow
+
         var points by remember { mutableStateOf(0) }
         var board by remember { mutableStateOf(generatePuzzle(solved = true)) }
-        var takePhoto by remember { mutableStateOf(false) }
-        var image by remember { mutableStateOf<ByteArray?>(null) }
 
         fun onPuzzleCompleted() {
             board = generatePuzzle()
             points++
         }
 
+        Text("Puzzle", style = MaterialTheme.typography.h2)
         Column(
             Modifier.fillMaxWidth().fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            if (takePhoto) {
-                Camera(
-                    onPhotoCapture = { bytearray ->
-                        image = bytearray
-                        takePhoto = false
-                    },
-                    onClose = {
-                        takePhoto = false
+            Text(if (!board.isSolved()) "Good luck" else "Well done!")
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("Point: $points")
+                Spacer(Modifier.width(20.dp))
+                if (board.isSolved()) {
+                    Button(onClick = {
+                        onPuzzleCompleted()
+                    }) {
+                        Text("New puzzle")
                     }
-                )
-            } else {
-                Text(if (!board.isSolved()) "Good luck" else "Well done!")
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Point: $points")
-                    Spacer(Modifier.width(20.dp))
-                    if (board.isSolved()) {
-                        Button(onClick = {
-                            onPuzzleCompleted()
-                        }) {
-                            Text("New puzzle")
-                        }
-                    } else {
-                        Button(onClick = { board = generatePuzzle() }) {
-                            Text("Reset puzzle")
-                        }
-                    }
-                    Spacer(Modifier.width(20.dp))
-                    Button(onClick = { takePhoto = true }) {
-                        Text("Take photo")
+                } else {
+                    Button(onClick = { board = generatePuzzle() }) {
+                        Text("Reset puzzle")
                     }
                 }
+                Spacer(Modifier.width(20.dp))
+                Button(onClick = { navigator.push(CameraScreen) }) {
+                    Text("Take photo")
+                }
+            }
 
-                Spacer(Modifier.height(16.dp))
-                PuzzleKeyboardListener(
-                    board = board,
-                    onSquareMove = { board = board.moveSquare(it) },
-                    onEnterPress = {
-                        if (board.isSolved()) {
-                            onPuzzleCompleted()
-                        }
-                    }) {
-                    PuzzleView(board = board, image = image) {
-                        board = board.moveSquare(it)
-
+            Spacer(Modifier.height(16.dp))
+            PuzzleKeyboardListener(
+                board = board,
+                onSquareMove = { board = board.moveSquare(it) },
+                onEnterPress = {
+                    if (board.isSolved()) {
+                        onPuzzleCompleted()
                     }
+                }) {
+                PuzzleView(board = board, image = image) {
+                    board = board.moveSquare(it)
                 }
             }
         }
