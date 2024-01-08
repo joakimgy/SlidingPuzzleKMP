@@ -9,16 +9,16 @@ plugins {
 }
 
 kotlin {
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        moduleName = "composeApp"
-        browser {
-            commonWebpackConfig {
-                outputFileName = "composeApp.js"
-            }
-        }
-        binaries.executable()
-    }
+    /* @OptIn(ExperimentalWasmDsl::class)
+     wasmJs {
+         moduleName = "composeApp"
+         browser {
+             commonWebpackConfig {
+                 outputFileName = "composeApp.js"
+             }
+         }
+         binaries.executable()
+     }*/
 
     androidTarget {
         compilations.all {
@@ -59,12 +59,16 @@ kotlin {
             implementation(compose.ui)
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.screenmodel)
+            implementation(libs.voyager.bottom.sheet.navigator)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.desktop.webcam.capture)
         }
     }
 }
