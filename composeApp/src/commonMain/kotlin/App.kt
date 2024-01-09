@@ -11,6 +11,7 @@ import coil3.ImageLoader
 import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.setSingletonImageLoaderFactory
 import coil3.fetch.NetworkFetcher
+import puzzle.PuzzleScreen
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -25,7 +26,7 @@ fun App() {
 
 
     MaterialTheme {
-        Navigator(StartScreen) {
+        Navigator(PuzzleScreen) {
             Scaffold(
                 topBar = { TopBar() },
                 content = {
