@@ -7,9 +7,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
+import coil3.ImageLoader
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.fetch.NetworkFetcher
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun App() {
+    setSingletonImageLoaderFactory { context ->
+        ImageLoader.Builder(context)
+            .components {
+                add(NetworkFetcher.Factory())
+            }
+            .build()
+    }
+
 
     MaterialTheme {
         Navigator(StartScreen) {

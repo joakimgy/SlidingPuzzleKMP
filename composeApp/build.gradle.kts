@@ -58,15 +58,25 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.components.resources)
+
+
+            // Navigation
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenmodel)
+
+            // Networking
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.cio)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.serialization)
+
+            // SVG & Images
+            implementation(libs.coil)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network)
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.components.resources)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
