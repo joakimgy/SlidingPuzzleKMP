@@ -24,12 +24,11 @@ object PuzzleScreen : Screen {
         val screenModel = navigator.rememberNavigatorScreenModel { PuzzleViewModel() }
         val state by screenModel.state.collectAsState()
 
-        var points by remember { mutableStateOf(0) }
         var board by remember { mutableStateOf(generatePuzzle(solved = true)) }
 
         fun onPuzzleCompleted() {
             board = generatePuzzle()
-            points++
+            state.points++
         }
 
         Column(
@@ -38,7 +37,7 @@ object PuzzleScreen : Screen {
             verticalArrangement = Arrangement.Center,
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Point: $points")
+                Text("Point: ${state.points}")
                 Spacer(Modifier.width(20.dp))
                 if (board.isSolved()) {
                     Button(onClick = {

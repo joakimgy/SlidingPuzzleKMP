@@ -6,6 +6,8 @@ import kotlinx.coroutines.runBlocking
 class PuzzleViewModel : StateScreenModel<PuzzleViewModel.State>(State.DefaultImage) {
 
     sealed class State {
+        var points = 0
+
         data object DefaultImage : State()
         data class GalleryImage(val image: ByteArray) : State()
     }
