@@ -11,26 +11,18 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
 
 
-data class PuzzleScreen(val image: ByteArray? = null) : Screen {
+object PuzzleScreen : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-        val screenModel = rememberScreenModel { PuzzleViewModel() }
+        val screenModel = navigator.rememberNavigatorScreenModel { PuzzleViewModel() }
         val state by screenModel.state.collectAsState()
-
-        LaunchedEffect(image) {
-            if (image != null) {
-                screenModel.setGalleryImage(image)
-            } else {
-                screenModel.resetToDefaultImage()
-            }
-        }
-
 
         var points by remember { mutableStateOf(0) }
         var board by remember { mutableStateOf(generatePuzzle(solved = true)) }

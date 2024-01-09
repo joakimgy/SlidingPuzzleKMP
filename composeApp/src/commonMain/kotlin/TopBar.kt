@@ -8,16 +8,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import kotlinx.coroutines.runBlocking
-import puzzle.PuzzleScreen
+import puzzle.PuzzleViewModel
 
 @Composable
 fun TopBar() {
     val navigator = LocalNavigator.currentOrThrow
-
+    val screenModel = navigator.rememberNavigatorScreenModel { PuzzleViewModel() }
 
     Row(
         modifier = Modifier
@@ -38,13 +39,18 @@ fun TopBar() {
             "Puzzles & Quiz",
             textAlign = TextAlign.Center,
         )
-        ChangePhotoButton()
+        ChangePhotoButton(onSelectPhoto = { image ->
+            if (image != null) {
+                screenModel.setGalleryImage(image)
+            } else {
+                screenModel.resetToDefaultImage()
+            }
+        })
     }
 }
 
 @Composable
-fun ChangePhotoButton() {
-    val navigator = LocalNavigator.currentOrThrow
+fun ChangePhotoButton(onSelectPhoto: (image: ByteArray?) -> Unit) {
     var showFilePicker by remember { mutableStateOf(false) }
     val fileType = listOf("jpg", "png")
 
@@ -59,11 +65,7 @@ fun ChangePhotoButton() {
                 showFilePicker = false
                 runBlocking {
                     val image = file?.getFileByteArray()
-                    if (navigator.canPop) {
-                        navigator.replace(PuzzleScreen(image = image))
-                    } else {
-                        navigator.push(PuzzleScreen(image = image))
-                    }
+                    onSelectPhoto(image)
                 }
             }
         }
