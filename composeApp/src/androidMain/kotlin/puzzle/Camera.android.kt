@@ -1,5 +1,6 @@
+package puzzle
+
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.util.Log
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -8,7 +9,6 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
@@ -18,8 +18,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
@@ -102,19 +100,3 @@ private fun CameraContent(
     }
 }
 
-@Composable
-actual fun CapturedImage(
-    imageData: ByteArray,
-    contentDescription: String,
-    contentScale: ContentScale,
-    modifier: Modifier
-) {
-    val bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
-    bitmap.prepareToDraw()
-    Image(
-        bitmap = bitmap.asImageBitmap(),
-        contentDescription = contentDescription,
-        contentScale = contentScale,
-        modifier = modifier
-    )
-}

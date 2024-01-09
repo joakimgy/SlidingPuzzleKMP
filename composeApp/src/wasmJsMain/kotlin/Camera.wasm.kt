@@ -15,12 +15,3 @@ actual fun Camera(
     }
 }
 
-@Composable
-actual fun CapturedImage(
-    imageData: ByteArray,
-    contentDescription: String,
-    contentScale: ContentScale,
-    modifier: Modifier
-) {
-    // TODO: Implement
-}

@@ -1,3 +1,5 @@
+package puzzle
+
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,12 +17,3 @@ actual fun Camera(
     }
 }
 
-@Composable
-actual fun CapturedImage(
-    imageData: ByteArray,
-    contentDescription: String,
-    contentScale: ContentScale,
-    modifier: Modifier
-) {
-    // TODO: Implement
-}

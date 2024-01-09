@@ -1,3 +1,5 @@
+package puzzle
+
 interface PuzzleConfig {
     val puzzleSize: Int
 }

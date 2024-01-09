@@ -1,3 +1,5 @@
+package puzzle
+
 class AndroidConfig : PuzzleConfig {
     override val puzzleSize: Int = 4
 }

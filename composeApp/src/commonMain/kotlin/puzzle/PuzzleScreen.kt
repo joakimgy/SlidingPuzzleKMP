@@ -1,3 +1,5 @@
+package puzzle
+
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -9,15 +11,26 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.model.rememberScreenModel
 
 
-data class PuzzleScreen(
-    val image: ByteArray?
-) : Screen {
+data class PuzzleScreen(val image: ByteArray? = null) : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+
+        val screenModel = rememberScreenModel { PuzzleViewModel() }
+        val state by screenModel.state.collectAsState()
+
+        LaunchedEffect(image) {
+            if (image != null) {
+                screenModel.setGalleryImage(image)
+            } else {
+                screenModel.resetToDefaultImage()
+            }
+        }
+
 
         var points by remember { mutableStateOf(0) }
         var board by remember { mutableStateOf(generatePuzzle(solved = true)) }
@@ -27,13 +40,11 @@ data class PuzzleScreen(
             points++
         }
 
-        Text("Puzzle", style = MaterialTheme.typography.h2)
         Column(
             Modifier.fillMaxWidth().fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            Text(if (!board.isSolved()) "Good luck" else "Well done!")
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("Point: $points")
                 Spacer(Modifier.width(20.dp))
@@ -63,7 +74,7 @@ data class PuzzleScreen(
                         onPuzzleCompleted()
                     }
                 }) {
-                PuzzleView(board = board, image = image) {
+                PuzzleView(board = board, state = state) {
                     board = board.moveSquare(it)
                 }
             }

@@ -1,3 +1,5 @@
+package puzzle
+
 class JVMConfig : PuzzleConfig {
     override val puzzleSize: Int = 4
 }

@@ -1,3 +1,5 @@
+package puzzle
+
 class IOSConfig : PuzzleConfig {
     override val puzzleSize: Int = 3
 }

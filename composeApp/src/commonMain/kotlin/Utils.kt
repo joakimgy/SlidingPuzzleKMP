@@ -6,3 +6,5 @@ fun <T> List<T>.swap(index1: Int, index2: Int) =
         mutableList[index2] = tmp
         mutableList
     }.toList()
+
+expect fun readFile(path: String): ByteArray

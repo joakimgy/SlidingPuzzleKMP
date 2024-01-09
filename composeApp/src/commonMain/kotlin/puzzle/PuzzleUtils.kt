@@ -1,3 +1,6 @@
+package puzzle
+
+import swap
 import kotlin.math.sqrt
 
 fun generatePuzzle(solved: Boolean = false): List<Int> {

@@ -77,6 +77,12 @@ kotlin {
             implementation(libs.coil.network)
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
+
+            // File picker
+            implementation(libs.mp.filepicker)
+
+            // Coroutines
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -84,6 +90,8 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.desktop.webcam.capture)
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.0-RC2")
+
         }
     }
 }

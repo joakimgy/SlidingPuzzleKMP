@@ -1,3 +1,5 @@
+package puzzle
+
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -15,12 +17,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun PuzzleView(board: List<Int>, image: ByteArray?, onClick: (squareIndex: Int) -> Unit) {
+fun PuzzleView(board: List<Int>, state: PuzzleViewModel.State, onClick: (squareIndex: Int) -> Unit) {
     Box(modifier = Modifier.widthIn(max = 600.dp).border(2.dp, Color.Black)) {
         LazyVerticalGrid(columns = GridCells.Fixed(board.getSize())) {
             items(board.withIndex().toList()) { item ->
@@ -28,7 +33,6 @@ fun PuzzleView(board: List<Int>, image: ByteArray?, onClick: (squareIndex: Int) 
                 Box(
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .then(if (!isEmptySquare) Modifier.background(Color(101, 222, 77)) else Modifier)
                         .clickable { onClick(item.index) },
                     contentAlignment = Alignment.Center,
                 ) {
@@ -47,20 +51,26 @@ fun PuzzleView(board: List<Int>, image: ByteArray?, onClick: (squareIndex: Int) 
                                 translationX = -(column * this.size.width)
                                 translationY = -(row * this.size.height)
                             }.fillMaxSize()
-                            if (image != null) {
-                                CapturedImage(
-                                    imageData = image,
-                                    contentDescription = contentDescription,
-                                    contentScale = contentScale,
-                                    modifier = modifier
-                                )
-                            } else {
-                                Image(
-                                    painter = painterResource("forest_small.jpg"),
-                                    contentDescription = contentDescription,
-                                    contentScale = contentScale,
-                                    modifier = modifier
-                                )
+                            when (state) {
+                                is PuzzleViewModel.State.GalleryImage -> {
+                                    AsyncImage(
+                                        model = ImageRequest.Builder(LocalPlatformContext.current)
+                                            .data(state.image)
+                                            .build(),
+                                        contentDescription = contentDescription,
+                                        contentScale = contentScale,
+                                        modifier = modifier,
+                                    )
+                                }
+
+                                else -> {
+                                    Image(
+                                        painter = painterResource("forest_small.jpg"),
+                                        contentDescription = contentDescription,
+                                        contentScale = contentScale,
+                                        modifier = modifier
+                                    )
+                                }
                             }
 
                         }

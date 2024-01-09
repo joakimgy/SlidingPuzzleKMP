@@ -33,7 +33,6 @@ fun App() {
                         CurrentScreen()
                     }
                 },
-                bottomBar = { BottomBar() }
             )
         }
     }
