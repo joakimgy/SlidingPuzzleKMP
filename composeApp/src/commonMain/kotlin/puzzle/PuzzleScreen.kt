@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import unsplash.UnsplashRepository
 
 
 object PuzzleScreen : Screen {
@@ -21,12 +22,15 @@ object PuzzleScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-        val screenModel = navigator.rememberNavigatorScreenModel { PuzzleViewModel() }
+        val screenModel = navigator.rememberNavigatorScreenModel { PuzzleViewModel(UnsplashRepository()) }
         val state by screenModel.state.collectAsState()
 
         var board by remember { mutableStateOf(generatePuzzle(solved = true)) }
 
         fun onPuzzleCompleted() {
+            if (state is PuzzleViewModel.State.UnsplashImage) {
+                screenModel.updateUnsplashImage()
+            }
             board = generatePuzzle()
             state.points++
         }

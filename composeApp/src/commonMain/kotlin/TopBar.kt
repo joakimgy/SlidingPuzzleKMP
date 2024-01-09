@@ -14,11 +14,12 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import kotlinx.coroutines.runBlocking
 import puzzle.PuzzleViewModel
+import unsplash.UnsplashRepository
 
 @Composable
 fun TopBar() {
     val navigator = LocalNavigator.currentOrThrow
-    val screenModel = navigator.rememberNavigatorScreenModel { PuzzleViewModel() }
+    val screenModel = navigator.rememberNavigatorScreenModel { PuzzleViewModel(UnsplashRepository()) }
 
     Row(
         modifier = Modifier

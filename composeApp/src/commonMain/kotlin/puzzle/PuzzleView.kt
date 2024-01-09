@@ -63,7 +63,18 @@ fun PuzzleView(board: List<Int>, state: PuzzleViewModel.State, onClick: (squareI
                                     )
                                 }
 
-                                else -> {
+                                is PuzzleViewModel.State.UnsplashImage -> {
+                                    AsyncImage(
+                                        model = ImageRequest.Builder(LocalPlatformContext.current)
+                                            .data(state.url)
+                                            .build(),
+                                        contentDescription = contentDescription,
+                                        contentScale = contentScale,
+                                        modifier = modifier,
+                                    )
+                                }
+
+                                is PuzzleViewModel.State.DefaultImage -> {
                                     Image(
                                         painter = painterResource("forest_small.jpg"),
                                         contentDescription = contentDescription,

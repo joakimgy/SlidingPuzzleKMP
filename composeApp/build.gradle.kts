@@ -1,13 +1,61 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import java.io.FileInputStream
+import java.io.InputStreamReader
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.*
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.kotlinSerialization)
+    id("com.codingfeline.buildkonfig") version "0.15.1"
 }
+
+fun getLocalProperty(key: String, file: String = "local.properties"): String {
+    val properties = Properties()
+    val localProperties = File(file)
+    if (localProperties.isFile) {
+        InputStreamReader(FileInputStream(localProperties), Charsets.UTF_8).use { reader ->
+            properties.load(reader)
+        }
+    } else error("File from not found")
+
+    return properties.getProperty(key)
+}
+
+
+buildkonfig {
+    packageName = "puzzle.sliding.SlidingPuzzle"
+
+    defaultConfigs {
+        defaultConfigs {
+            buildConfigField(
+                FieldSpec.Type.STRING,
+                "UNSPLASH_API",
+                getLocalProperty("UNSPLASH_API")
+            )
+
+        }
+        /* buildConfigField(
+             com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+             "API_KEY", ((project.findProperty("API_KEY") ?: "") as String)
+         )*/
+    }
+}
+
+/*buildkonfig {
+    packageName = "com.example.app"
+    // objectName = "YourAwesomeConfig"
+    // exposeObjectWithName = "YourAwesomePublicConfig"
+
+    defaultConfigs {
+        buildConfigField(STRING, "name", "value")
+    }
+}*/
 
 kotlin {
     /* @OptIn(ExperimentalWasmDsl::class)
