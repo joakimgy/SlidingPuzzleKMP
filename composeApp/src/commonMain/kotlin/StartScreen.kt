@@ -17,5 +17,8 @@ object StartScreen : Screen {
         Button(onClick = { navigator.push(PuzzleScreen(image = null)) }) {
             Text("Start puzzle")
         }
+        Button(onClick = { navigator.push(QuizScreen) }) {
+            Text("Go to Quiz")
+        }
     }
 }

@@ -38,7 +38,7 @@ fun TopBar() {
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                "Geography quiz",
+                "Puzzles & Quiz",
                 textAlign = TextAlign.Center,
             )
         }

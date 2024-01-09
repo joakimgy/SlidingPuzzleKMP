@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -61,7 +62,11 @@ kotlin {
             implementation(compose.components.resources)
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenmodel)
-            implementation(libs.voyager.bottom.sheet.navigator)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.serialization)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
